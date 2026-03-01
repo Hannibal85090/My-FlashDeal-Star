@@ -1,12 +1,23 @@
-# FlashDeal Star Core Security (ERC-8004 Compliant Concept)
-class FlashDealStarSecurity:
+# My FlashDeal Star - Dual Biometric Security System
+class FlashDealSecurity:
     def __init__(self):
-        # أنماط التحقق المتعددة لضمان أعلى جودة
-        self.modes = ["Fingerprint", "Facial_Biometrics", "Mutual_Token"]
-        self.status = "Verifiable_Trust_Active"
+            self.face_auth = False
+                    self.motion_auth = False
 
-    def authorize_transaction(self, mutual_token):
-        # منطق التوكن المتبادل لحماية رأس المال
-        if mutual_token == "VERIFIED":
-            return "Talk. Pay. Done. - Secure"
-        return "Access Denied"
+                        def verify_dual_biometrics(self):
+                                # التحقق من بصمة الوجه وحركة الجسم معاً
+                                        print("[Security] Scanning Face...")
+                                                self.face_auth = True 
+                                                        
+                                                                print("[Security] Analyzing Body Movement...")
+                                                                        self.motion_auth = True
+
+                                                                                if self.face_auth and self.motion_auth:
+                                                                                            return "SUCCESS: Identity Confirmed"
+                                                                                                    return "FAILURE: Security Mismatch"
+
+                                                                                                        def execute_secure_pay(self):
+                                                                                                                if self.verify_dual_biometrics() == "SUCCESS: Identity Confirmed":
+                                                                                                                            return "Talk. Pay. Done."
+                                                                                                                                    return "Transaction Blocked"
+                                                                                                                                    

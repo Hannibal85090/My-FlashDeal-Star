@@ -1,21 +1,22 @@
-import hashlib
-import time
 import secrets
+import hashlib
 
-class FlashDealTokenEngine:
+class MutualTokenEngine:
     def __init__(self):
-        # معايير جودة عالية: استخدام أرقام سرية مشفرة
-        self.secret_salt = secrets.token_hex(16)
+            self.secret_salt = "FlashDeal_2026_Secure"
+                    self.active_deals = {}
 
-    def generate_mutual_token(self, user_id, star_device_id):
-        """
-        إنشاء 'Mutual Token' يربط بين المستخدم وجهاز 'My FlashDeal Star'
-        """
-        timestamp = str(int(time.time() // 30))  # التوكين يتغير كل 30 ثانية لأمان أعلى
-        raw_data = f"{user_id}:{star_device_id}:{timestamp}:{self.secret_salt}"
-        return hashlib.sha256(raw_data.encode()).hexdigest()
+                        def generate_sync_token(self, dealer_id, customer_id):
+                                # توليد توكن فريد يربط البائع بالمشتري
+                                        raw_data = f"{dealer_id}-{customer_id}-{secrets.token_hex(8)}"
+                                                token = hashlib.sha256((raw_data + self.secret_salt).encode()).hexdigest()[:16]
+                                                        self.active_deals[token] = "PENDING_BIOMETRICS"
+                                                                return token
 
-    def verify_token(self, provided_token, user_id, star_device_id):
-        # التحقق من مطابقة التوكين لضمان تنفيذ (Talk. Pay. Done.)
-        expected_token = self.generate_mutual_token(user_id, star_device_id)
-        return secrets.compare_digest(provided_token, expected_token)
+                                                                    def finalize_deal(self, token):
+                                                                            # تفعيل الصفقة: Talk. Pay. Done.
+                                                                                    if token in self.active_deals:
+                                                                                                self.active_deals[token] = "COMPLETED"
+                                                                                                            return "Transaction Successful: Talk. Pay. Done."
+                                                                                                                    return "Error: Invalid Token"
+                                                                                    
