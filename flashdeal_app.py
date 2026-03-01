@@ -1,4 +1,4 @@
-
+import streamlit as st  # تأكد من وجود هذا السطر أولاً
 import time
 
 # --- مستودع ميزات الأمان المتقدمة (Security Module) ---
