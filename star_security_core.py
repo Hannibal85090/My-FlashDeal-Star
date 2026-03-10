@@ -1,32 +1,92 @@
-import streamlit as st
+# my-flashdeal-star/main/star_security_core.py
 
-# 1. الإعدادات الأساسية
-st.set_page_config(page_title="My FlashDeal Star", page_icon="⭐")
+import datetime
+import json
 
-# 2. تنسيق فخم (تصحيح خطأ markdown السابق)
-st.markdown("""
-    <style>
-    .stApp { background-color: #050505; color: gold; }
-    .stButton>button { background-color: gold; color: black; border-radius: 10px; width: 100%; }
-    </style>
-    """, unsafe_allow_html=True)
+class FlashDealStar:
+    def __init__(self):
+        # إعدادات المنتج
+        self.product = {
+            "title": "My FlashDeal Star",
+            "image": "./assets/headphones_small.png",
+            "price": "99.99 €",
+            "rating": 4.5,  # تقييم النجوم
+        }
 
-# 3. واجهة النجمة
-st.title("⭐ My FlashDeal Star")
-st.write("Talk. Pay. Done.")
+        # إعدادات الترجمة (عربي/فرنسي/إنجليزي)
+        self.translations = {
+            "en": {
+                "title": "My FlashDeal Star",
+                "price": "Price",
+                "countdown": "Countdown",
+                "date": "Date",
+                "deal_done": "Deal Completed! 🎉✨",
+            },
+            "ar": {
+                "title": "ماي فلاش ديل ستار",
+                "price": "السعر",
+                "countdown": "المؤقت",
+                "date": "التاريخ",
+                "deal_done": "تمت الصفقة! 🎈⭐",
+            },
+            "fr": {
+                "title": "Mon FlashDeal Star",
+                "price": "Prix",
+                "countdown": "Compte à rebours",
+                "date": "Date",
+                "deal_done": "Transaction terminée ! 🎈⭐",
+            },
+        }
 
-# 4. المحرك الأمني
-token = st.text_input("ادخل توكن الأمان المتفق عليه", type="password")
+        # اللغة الافتراضية
+        self.language = "en"
 
-if st.button("تفعيل النجمة"):
-    if token == "FLASH_2026":
-        st.success("تم الاتصال بنجاح.. النظام الموازي نشط الآن")
-        st.balloons()
-    else:
-        st.error("التوكن غير صحيح، راجع سجل الاعتبار")
+        # مؤقت الصفقة (ساعة واحدة)
+        self.time_left = 3600
 
-# 5. المسار الموازي (الجودة العالية)
-with st.expander("🛠️ مميزات المشروع الموازي"):
-    st.write("- نظام بصمة الحركة (قيد البرمجة)")
-    st.write("- التوكن المتبادل (Mutual Token)")
-    st.info("هذا المسار مخصص للجودة العالية والتمويل المستقبلي.")
+    def change_language(self, lang):
+        if lang in self.translations:
+            self.language = lang
+
+    def get_translation(self, key):
+        return self.translations[self.language].get(key, key)
+
+    def format_time(self):
+        m, s = divmod(self.time_left, 60)
+        return f"{m}:{s:02d}"
+
+    def tick(self):
+        if self.time_left > 0:
+            self.time_left -= 1
+
+    def get_date(self):
+        return datetime.datetime.now().strftime("%Y-%m-%d")
+
+    def get_rating_stars(self):
+        full_stars = int(self.product["rating"])
+        half_star = 1 if self.product["rating"] % 1 >= 0.5 else 0
+        empty_stars = 5 - full_stars - half_star
+        return "⭐" * full_stars + ("☆" if half_star else "") + "☆" * empty_stars
+
+    def complete_deal(self):
+        # عند إتمام الصفقة: بالونات + نجوم ذهبية
+        return self.get_translation("deal_done")
+
+    def render(self):
+        # إخراج منسق للعرض (يمكن ربطه بواجهة React Native أو Web)
+        return {
+            "title": self.get_translation("title"),
+            "image": self.product["image"],
+            "price": f"{self.get_translation('price')}: {self.product['price']}",
+            "countdown": f"{self.get_translation('countdown')}: {self.format_time()}",
+            "date": f"{self.get_translation('date')}: {self.get_date()}",
+            "rating": self.get_rating_stars(),
+        }
+
+
+# مثال تشغيل
+if __name__ == "__main__":
+    app = FlashDealStar()
+    app.change_language("ar")  # تغيير اللغة إلى العربية
+    print(json.dumps(app.render(), ensure_ascii=False, indent=2))
+    print(app.complete_deal())
