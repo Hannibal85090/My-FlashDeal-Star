@@ -1,54 +1,32 @@
 import streamlit as st
 
-# 1. إعدادات الصفحة والهوية البصرية
-st.set_page_config(page_title="My FlashDeal Star", page_icon="⭐", layout="centered")
+# 1. الإعدادات الأساسية
+st.set_page_config(page_title="My FlashDeal Star", page_icon="⭐")
 
-# إضافة لمسة جمالية بالـ CSS (لجعل الواجهة فخمة)
+# 2. تنسيق فخم (تصحيح خطأ markdown السابق)
 st.markdown("""
     <style>
-    .main {
-        background-color: #0e1117;
-    }
-    .stButton>button {
-        width: 100%;
-        border-radius: 20px;
-        height: 3em;
-        background-color: #FFD700;
-        color: black;
-        font-weight: bold;
-    }
+    .stApp { background-color: #050505; color: gold; }
+    .stButton>button { background-color: gold; color: black; border-radius: 10px; width: 100%; }
     </style>
-    """, unsafe_allow_index=True)
+    """, unsafe_allow_html=True)
 
-# 2. المحرك الأمني
-class FlashDealSecurity:
-    def __init__(self):
-        self.key = "FLASH_2026"
-
-    def check(self, input_key):
-        return input_key == self.key
-
-# 3. الواجهة الأمامية
+# 3. واجهة النجمة
 st.title("⭐ My FlashDeal Star")
-st.write("---")
-st.markdown("### 🔒 Secure Access Node")
+st.write("Talk. Pay. Done.")
 
-security = FlashDealSecurity()
-user_token = st.text_input("Enter Security Token:", type="password", help="Input the mutual token for authentication")
+# 4. المحرك الأمني
+token = st.text_input("ادخل توكن الأمان المتفق عليه", type="password")
 
-if st.button("Activate Star System"):
-    if security.check(user_token):
-        st.success("✅ Access Granted. Parallel Security System Online.")
+if st.button("تفعيل النجمة"):
+    if token == "FLASH_2026":
+        st.success("تم الاتصال بنجاح.. النظام الموازي نشط الآن")
         st.balloons()
-        # هنا سنضع ميزة "بصمة الحركة" لاحقاً
-        st.info("System Status: Synchronizing Body Movement Compatibility...")
     else:
-        st.error("❌ Invalid Token. Access Denied.")
+        st.error("التوكن غير صحيح، راجع سجل الاعتبار")
 
-# 4. قسم التطوير (Project Roadmap)
-with st.expander("🛠️ Advanced Analytics & Parallel Project"):
-    st.write("Current Phase: Identity Verification")
-    st.progress(25) # شريط تقدم يوضح أننا أنجزنا 25% من المشروع
-    st.write("- [x] Core Interface")
-    st.write("- [ ] Body Movement Logic (Pending)")
-    st.write("- [ ] Mutual Token Exchange (Pending)")
+# 5. المسار الموازي (الجودة العالية)
+with st.expander("🛠️ مميزات المشروع الموازي"):
+    st.write("- نظام بصمة الحركة (قيد البرمجة)")
+    st.write("- التوكن المتبادل (Mutual Token)")
+    st.info("هذا المسار مخصص للجودة العالية والتمويل المستقبلي.")
