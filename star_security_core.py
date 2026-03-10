@@ -1,29 +1,32 @@
 import streamlit as st
 
-class MyFlashDealStarSecurity:
-    """
-    المحرك الأمني الذكي لنجمة فلاش ديل
-    Slogan: Talk. Pay. Done.
-    """
+# 1. المحرك الأمني (The Core Engine)
+class FlashDealSecurity:
     def __init__(self):
         self.master_token = "FLASH_2026"
 
-    def verify_token(self, token):
-        # التحقق من التوكن لضمان أمان العمليات
+    def verify(self, token):
         return token == self.master_token
 
-# هذا الجزء لعرض الواجهة داخل الملف مؤقتاً للتأكد من عمله
+# 2. إعدادات الواجهة (The Interface)
 st.set_page_config(page_title="My FlashDeal Star", page_icon="⭐")
 st.title("⭐ My FlashDeal Star")
 st.subheader("Talk. Pay. Done.")
 
-security = MyFlashDealStarSecurity()
+security = FlashDealSecurity()
 
-token_input = st.text_input("تفعيل نظام التوكن الآمن:", type="password")
-if st.button("اتصال"):
-    if security.verify_token(token_input):
-        st.success("تم الاتصال بنجاح! النظام جاهز للعمليات.")
+# 3. نظام التفاعل
+token_input = st.text_input("أدخل توكن الأمان المتفق عليه:", type="password")
+
+if st.button("تفعيل النجمة"):
+    if security.verify(token_input):
+        st.success("✅ تم الاتصال بنجاح. النظام الأمني الموازي نشط الآن.")
+        st.balloons()
     else:
-        st.error("خطأ في التوكن.")
+        st.error("❌ التوكن غير صحيح. راجع سجل الاعتبار.")
 
-st.info("قيد التطوير في المشروع الموازي: نظام حماية حركة الجسم (Body Movement).")
+# 4. قسم المشروع الموازي (High-Quality Track)
+with st.expander("🚀 ميزات المشروع الموازي"):
+    st.write("- نظام بصمة الحركة (قيد البرمجة)")
+    st.write("- التوكن المتبادل (Mutual Token)")
+    st.info("هذا المسار مخصص للجودة العالية والتمويل المستقبلي.")
