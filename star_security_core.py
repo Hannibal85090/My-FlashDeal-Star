@@ -8,7 +8,7 @@ class FlashDealStar:
         # إعدادات المنتج
         self.product = {
             "title": "My FlashDeal Star",
-            "image": "./assets/headphones_small.png",
+            "image": "assets/images/headphones_small.png",  # ربط مباشر بالصورة من مجلدك
             "price": "99.99 €",
             "rating": 4.5,  # تقييم النجوم
         }
@@ -21,6 +21,7 @@ class FlashDealStar:
                 "countdown": "Countdown",
                 "date": "Date",
                 "deal_done": "Deal Completed! 🎉✨",
+                "rating": "Rating",
             },
             "ar": {
                 "title": "ماي فلاش ديل ستار",
@@ -28,6 +29,7 @@ class FlashDealStar:
                 "countdown": "المؤقت",
                 "date": "التاريخ",
                 "deal_done": "تمت الصفقة! 🎈⭐",
+                "rating": "التقييم",
             },
             "fr": {
                 "title": "Mon FlashDeal Star",
@@ -35,6 +37,7 @@ class FlashDealStar:
                 "countdown": "Compte à rebours",
                 "date": "Date",
                 "deal_done": "Transaction terminée ! 🎈⭐",
+                "rating": "Évaluation",
             },
         }
 
@@ -66,7 +69,7 @@ class FlashDealStar:
         full_stars = int(self.product["rating"])
         half_star = 1 if self.product["rating"] % 1 >= 0.5 else 0
         empty_stars = 5 - full_stars - half_star
-        return "⭐" * full_stars + ("☆" if half_star else "") + "☆" * empty_stars
+        return "⭐" * full_stars + ("⭐" if half_star else "") + "☆" * empty_stars
 
     def complete_deal(self):
         # عند إتمام الصفقة: بالونات + نجوم ذهبية
@@ -80,7 +83,7 @@ class FlashDealStar:
             "price": f"{self.get_translation('price')}: {self.product['price']}",
             "countdown": f"{self.get_translation('countdown')}: {self.format_time()}",
             "date": f"{self.get_translation('date')}: {self.get_date()}",
-            "rating": self.get_rating_stars(),
+            "rating": f"{self.get_translation('rating')}: {self.get_rating_stars()}",
         }
 
 
