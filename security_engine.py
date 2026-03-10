@@ -1,23 +1,24 @@
-# My FlashDeal Star - Dual Biometric Security System
+import streamlit as st
+
+# --- الجزء الأول: المرحلة الراهنة (Core System) ---
 class FlashDealSecurity:
     def __init__(self):
-            self.face_auth = False
-                    self.motion_auth = False
+        self.basic_auth = True
+        self.token_active = True
+        self.simple_code = "1234"
 
-                        def verify_dual_biometrics(self):
-                                # التحقق من بصمة الوجه وحركة الجسم معاً
-                                        print("[Security] Scanning Face...")
-                                                self.face_auth = True 
-                                                        
-                                                                print("[Security] Analyzing Body Movement...")
-                                                                        self.motion_auth = True
+    def verify_token(self, input_token):
+        if input_token == "FLASH_2026":
+            return True
+        return False
 
-                                                                                if self.face_auth and self.motion_auth:
-                                                                                            return "SUCCESS: Identity Confirmed"
-                                                                                                    return "FAILURE: Security Mismatch"
+# --- الجزء الثاني: المشروع الموازي المستقبلي (High-Quality Track) ---
+class AdvancedBiometrics:
+    def __init__(self):
+        self.motion_auth = False
+        self.face_id_enabled = False
+        self.body_movement_sync = False
 
-                                                                                                        def execute_secure_pay(self):
-                                                                                                                if self.verify_dual_biometrics() == "SUCCESS: Identity Confirmed":
-                                                                                                                            return "Talk. Pay. Done."
-                                                                                                                                    return "Transaction Blocked"
-                                                                                                                                    
+    def activate_high_quality_features(self):
+        st.info("High-Quality features are locked for future funding.")
+        self.motion_auth = True
