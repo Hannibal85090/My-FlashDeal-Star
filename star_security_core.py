@@ -1,95 +1,59 @@
-# my-flashdeal-star/main/star_security_core.py
+import re
+import hashlib
 
-import datetime
-import json
-
-class FlashDealStar:
+class FlashDealStarSecurity:
+    """
+    النواة الأمنية لمشروع My FlashDeal Star (النسخة عالية الجودة)
+    تشمل: فلترة المحتوى، إدارة التوكن، والتحقق البيومتري.
+    """
     def __init__(self):
-        # إعدادات المنتج
-        self.product = {
-            "title": "My FlashDeal Star",
-            "image": "assets/images/headphones_small.png",  # ربط مباشر بالصورة من مجلدك
-            "price": "99.99 €",
-            "rating": 4.5,  # تقييم النجوم
-        }
+        self.hoax_keywords = ["virus", "format", "urgent", "broadcast", "macron", "con"]
+        self.version = "2.0.0"
 
-        # إعدادات الترجمة (عربي/فرنسي/إنجليزي)
-        self.translations = {
-            "en": {
-                "title": "My FlashDeal Star",
-                "price": "Price",
-                "countdown": "Countdown",
-                "date": "Date",
-                "deal_done": "Deal Completed! 🎉✨",
-                "rating": "Rating",
-            },
-            "ar": {
-                "title": "ماي فلاش ديل ستار",
-                "price": "السعر",
-                "countdown": "المؤقت",
-                "date": "التاريخ",
-                "deal_done": "تمت الصفقة! 🎈⭐",
-                "rating": "التقييم",
-            },
-            "fr": {
-                "title": "Mon FlashDeal Star",
-                "price": "Prix",
-                "countdown": "Compte à rebours",
-                "date": "Date",
-                "deal_done": "Transaction terminée ! 🎈⭐",
-                "rating": "Évaluation",
-            },
-        }
+    # --- 1. محرك فلترة المحتوى (الميزة الجديدة) ---
+    def validate_content(self, message):
+        """يفحص الرسائل والروابط لمنع الاحتيال"""
+        score = 0
+        content_lower = message.lower()
+        
+        # فحص الكلمات المشبوهة
+        for word in self.hoax_keywords:
+            if word in content_lower:
+                score += 1
+        
+        # فحص الروابط (Regex)
+        url_pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+        if re.search(url_pattern, content_lower):
+            score += 2
 
-        # اللغة الافتراضية
-        self.language = "en"
+        if score >= 3:
+            return False, "BLOCK: Malicious content or Hoax detected."
+        return True, "SAFE"
 
-        # مؤقت الصفقة (ساعة واحدة)
-        self.time_left = 3600
+    # --- 2. إدارة التوكن (Token Aspect) ---
+    def generate_secure_token(self, data):
+        """توليد توكن فريد لكل عملية لضمان الأمان"""
+        raw_token = f"{data}{self.version}"
+        return hashlib.sha256(raw_token.encode()).hexdigest()
 
-    def change_language(self, lang):
-        if lang in self.translations:
-            self.language = lang
+    # --- 3. التحقق البيومتري (مستقبلي) ---
+    def verify_biometrics(self, bio_type):
+        """محاكي للتحقق عبر البصمة أو الوجه أو حركة الجسم"""
+        # سيتم ربطها بالحساسات لاحقاً في Star Device
+        return f"Verifying {bio_type}... Access Granted."
 
-    def get_translation(self, key):
-        return self.translations[self.language].get(key, key)
-
-    def format_time(self):
-        m, s = divmod(self.time_left, 60)
-        return f"{m}:{s:02d}"
-
-    def tick(self):
-        if self.time_left > 0:
-            self.time_left -= 1
-
-    def get_date(self):
-        return datetime.datetime.now().strftime("%Y-%m-%d")
-
-    def get_rating_stars(self):
-        full_stars = int(self.product["rating"])
-        half_star = 1 if self.product["rating"] % 1 >= 0.5 else 0
-        empty_stars = 5 - full_stars - half_star
-        return "⭐" * full_stars + ("⭐" if half_star else "") + "☆" * empty_stars
-
-    def complete_deal(self):
-        # عند إتمام الصفقة: بالونات + نجوم ذهبية
-        return self.get_translation("deal_done")
-
-    def render(self):
-        # إخراج منسق للعرض (يمكن ربطه بواجهة React Native أو Web)
-        return {
-            "title": self.get_translation("title"),
-            "image": self.product["image"],
-            "price": f"{self.get_translation('price')}: {self.product['price']}",
-            "countdown": f"{self.get_translation('countdown')}: {self.format_time()}",
-            "date": f"{self.get_translation('date')}: {self.get_date()}",
-            "rating": f"{self.get_translation('rating')}: {self.get_rating_stars()}",
-        }
-
-
-# مثال تشغيل
+# --- منطقة التشغيل التجريبي ---
 if __name__ == "__main__":
-    app = FlashDealStar()
-    app.change_language("ar")  # تغيير اللغة إلى العربية
-    print(json.dumps(app.render(), ensure_ascii=False, indent=2))
-    print(app.complete_deal())
+    security = FlashDealStarSecurity()
+    
+    # تجربة الفلترة على الرسالة المشبوهة
+    msg = "Attention, la vidéo Macron est un virus qui formate votre mobile."
+    is_safe, status = security.validate_content(msg)
+    
+    # في حالة الأمان فقط، يتم إصدار التوكن
+    if is_safe:
+        token = security.generate_secure_token("Transaction_001")
+        # print(f"Status: {status} | Token: {token}")
+    else:
+        # print(f"Security Alert: {status}")
+        pass
