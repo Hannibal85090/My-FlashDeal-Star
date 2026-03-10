@@ -5,7 +5,8 @@ class FlashDealSecurity:
     def __init__(self):
         self.basic_auth = True
         self.token_active = True
-        self.simple_code = "1234"
+        # تم تصحيح المحاذاة هنا (4 مسافات)
+        self.simple_code = "1234" 
 
     def verify_token(self, input_token):
         if input_token == "FLASH_2026":
@@ -15,10 +16,10 @@ class FlashDealSecurity:
 # --- الجزء الثاني: المشروع الموازي المستقبلي (High-Quality Track) ---
 class AdvancedBiometrics:
     def __init__(self):
-        self.motion_auth = False
+        self.motion_auth = False # ميزة مستقبلية: تحليل المشية
         self.face_id_enabled = False
         self.body_movement_sync = False
 
     def activate_high_quality_features(self):
-        st.info("High-Quality features are locked for future funding.")
+        st.info("High-Quality features are locked for future funding/scaling.")
         self.motion_auth = True
