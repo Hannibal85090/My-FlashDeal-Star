@@ -1,5 +1,7 @@
 import streamlit as st
-from flashdeal_app.security_engine import FlashDealSecurity
+# السطر الجديد الذي يجب وضعه
+from star_security_core import MyFlashDealStarSecurity
+
 
 st.set_page_config(page_title="My FlashDeal Star", page_icon="⭐")
 
