@@ -1,33 +1,25 @@
 import streamlit as st
 
-# 1. المحرك الأمني المستقل (بدون استدعاءات خارجية)
+# --- الجزء الأول: المرحلة الراهنة (Core System) ---
 class FlashDealSecurity:
     def __init__(self):
-        self.master_token = "FLASH_2026"
+        self.basic_auth = True
+        self.token_active = True
+        # تم تصحيح المحاذاة هنا (4 مسافات)
+        self.simple_code = "1234" 
 
-    def verify(self, token):
-        return token == self.master_token
+    def verify_token(self, input_token):
+        if input_token == "FLASH_2026":
+            return True
+        return False
 
-# 2. إعدادات الواجهة المباشرة
-st.set_page_config(page_title="My FlashDeal Star", page_icon="⭐")
-st.title("⭐ My FlashDeal Star")
-st.subheader("Talk. Pay. Done.")
+# --- الجزء الثاني: المشروع الموازي المستقبلي (High-Quality Track) ---
+class AdvancedBiometrics:
+    def __init__(self):
+        self.motion_auth = False # ميزة مستقبلية: تحليل المشية
+        self.face_id_enabled = False
+        self.body_movement_sync = False
 
-# تفعيل الأمان
-security = FlashDealSecurity()
-
-# 3. نظام التفاعل مع المستخدم
-token_input = st.text_input("أدخل توكن الأمان المتفق عليه:", type="password")
-
-if st.button("تفعيل النجمة"):
-    if security.verify(token_input):
-        st.success("✅ تم الاتصال بنجاح. النظام الأمني الموازي نشط الآن.")
-        st.balloons()
-    else:
-        st.error("❌ التوكن غير صحيح. راجع سجل الاعتبار.")
-
-# 4. ميزات المستقبل (High-Quality Track)
-with st.expander("🚀 ميزات المشروع الموازي"):
-    st.write("- نظام بصمة الحركة (قيد البرمجة)")
-    st.write("- التوكن المتبادل (Mutual Token)")
-    st.info("هذا المسار مخصص للجودة العالية والتمويل المستقل.")
+    def activate_high_quality_features(self):
+        st.info("High-Quality features are locked for future funding/scaling.")
+        self.motion_auth = True
