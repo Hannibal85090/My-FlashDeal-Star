@@ -1,25 +1,18 @@
 import streamlit as st
+from flashdeal_app.security_engine import FlashDealSecurity
 
-# --- الجزء الأول: المرحلة الراهنة (Core System) ---
-class FlashDealSecurity:
-    def __init__(self):
-        self.basic_auth = True
-        self.token_active = True
-        # تم تصحيح المحاذاة هنا (4 مسافات)
-        self.simple_code = "1234" 
+st.set_page_config(page_title="My FlashDeal Star", page_icon="⭐")
 
-    def verify_token(self, input_token):
-        if input_token == "FLASH_2026":
-            return True
-        return False
+st.title("⭐ My FlashDeal Star")
+st.subheader("Talk. Pay. Done.")
 
-# --- الجزء الثاني: المشروع الموازي المستقبلي (High-Quality Track) ---
-class AdvancedBiometrics:
-    def __init__(self):
-        self.motion_auth = False # ميزة مستقبلية: تحليل المشية
-        self.face_id_enabled = False
-        self.body_movement_sync = False
+# تفعيل النظام الأمني الراهن
+security = FlashDealSecurity()
 
-    def activate_high_quality_features(self):
-        st.info("High-Quality features are locked for future funding/scaling.")
-        self.motion_auth = True
+if st.button("تفعيل نظام التوكن الآمن"):
+    if security.verify_token("FLASH_2026"):
+        st.success("تم الاتصال بالنجاح! النظام جاهز للعمليات.")
+    else:
+        st.error("خطأ في التوكن.")
+
+st.info("نظام حماية حركة الجسم (Body Movement) قيد التطوير في المشروع الموازي.")
