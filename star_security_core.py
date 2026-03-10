@@ -1,59 +1,34 @@
-import re
-import hashlib
+import streamlit as st
+from star_security_core import FlashDealStarSecurity
 
-class FlashDealStarSecurity:
-    """
-    النواة الأمنية لمشروع My FlashDeal Star (النسخة عالية الجودة)
-    تشمل: فلترة المحتوى، إدارة التوكن، والتحقق البيومتري.
-    """
-    def __init__(self):
-        self.hoax_keywords = ["virus", "format", "urgent", "broadcast", "macron", "con"]
-        self.version = "2.0.0"
+# إعدادات الصفحة
+st.set_page_config(page_title="My FlashDeal Star", page_icon="🌟")
 
-    # --- 1. محرك فلترة المحتوى (الميزة الجديدة) ---
-    def validate_content(self, message):
-        """يفحص الرسائل والروابط لمنع الاحتيال"""
-        score = 0
-        content_lower = message.lower()
-        
-        # فحص الكلمات المشبوهة
-        for word in self.hoax_keywords:
-            if word in content_lower:
-                score += 1
-        
-        # فحص الروابط (Regex)
-        url_pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
-        if re.search(url_pattern, content_lower):
-            score += 2
+# استدعاء النظام الأمني
+security = FlashDealStarSecurity()
 
-        if score >= 3:
-            return False, "BLOCK: Malicious content or Hoax detected."
-        return True, "SAFE"
+# واجهة المستخدم
+st.title("🌟 My FlashDeal Star")
+st.subheader("Talk. Pay. Done.")
 
-    # --- 2. إدارة التوكن (Token Aspect) ---
-    def generate_secure_token(self, data):
-        """توليد توكن فريد لكل عملية لضمان الأمان"""
-        raw_token = f"{data}{self.version}"
-        return hashlib.sha256(raw_token.encode()).hexdigest()
+st.divider()
 
-    # --- 3. التحقق البيومتري (مستقبلي) ---
-    def verify_biometrics(self, bio_type):
-        """محاكي للتحقق عبر البصمة أو الوجه أو حركة الجسم"""
-        # سيتم ربطها بالحساسات لاحقاً في Star Device
-        return f"Verifying {bio_type}... Access Granted."
+# منطقة تجربة فلترة الرسائل (الميزة الجديدة)
+st.write("### 🛡️ Security Scanner")
+user_input = st.text_area("أدخل الرسالة أو الرابط للفحص:", placeholder="مثال: Attention la vidéo Macron...")
 
-# --- منطقة التشغيل التجريبي ---
-if __name__ == "__main__":
-    security = FlashDealStarSecurity()
-    
-    # تجربة الفلترة على الرسالة المشبوهة
-    msg = "Attention, la vidéo Macron est un virus qui formate votre mobile."
-    is_safe, status = security.validate_content(msg)
-    
-    # في حالة الأمان فقط، يتم إصدار التوكن
-    if is_safe:
-        token = security.generate_secure_token("Transaction_001")
-        # print(f"Status: {status} | Token: {token}")
+if st.button("فحص الأمان"):
+    if user_input:
+        is_safe, message = security.validate_content(user_input)
+        if is_safe:
+            st.success(f"✅ {message}")
+            # توليد توكن في حالة الأمان
+            token = security.generate_secure_token(user_input[:10])
+            st.info(f"Generated Token: {token}")
+        else:
+            st.error(f"⚠️ {message}")
     else:
-        # print(f"Security Alert: {status}")
-        pass
+        st.warning("الرجاء إدخال نص للفحص")
+
+st.divider()
+st.caption("FlashDeal High-Quality Parallel Project v2.0")
