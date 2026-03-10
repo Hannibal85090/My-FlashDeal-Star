@@ -1,18 +1,33 @@
 import streamlit as st
-from flashdeal_app.security_engine import FlashDealSecurity
 
+# 1. المحرك الأمني المستقل (بدون استدعاءات خارجية)
+class FlashDealSecurity:
+    def __init__(self):
+        self.master_token = "FLASH_2026"
+
+    def verify(self, token):
+        return token == self.master_token
+
+# 2. إعدادات الواجهة المباشرة
 st.set_page_config(page_title="My FlashDeal Star", page_icon="⭐")
-
 st.title("⭐ My FlashDeal Star")
 st.subheader("Talk. Pay. Done.")
 
-# تفعيل النظام الأمني الراهن
+# تفعيل الأمان
 security = FlashDealSecurity()
 
-if st.button("تفعيل نظام التوكن الآمن"):
-    if security.verify_token("FLASH_2026"):
-        st.success("تم الاتصال بالنجاح! النظام جاهز للعمليات.")
-    else:
-        st.error("خطأ في التوكن.")
+# 3. نظام التفاعل مع المستخدم
+token_input = st.text_input("أدخل توكن الأمان المتفق عليه:", type="password")
 
-st.info("نظام حماية حركة الجسم (Body Movement) قيد التطوير في المشروع الموازي.")
+if st.button("تفعيل النجمة"):
+    if security.verify(token_input):
+        st.success("✅ تم الاتصال بنجاح. النظام الأمني الموازي نشط الآن.")
+        st.balloons()
+    else:
+        st.error("❌ التوكن غير صحيح. راجع سجل الاعتبار.")
+
+# 4. ميزات المستقبل (High-Quality Track)
+with st.expander("🚀 ميزات المشروع الموازي"):
+    st.write("- نظام بصمة الحركة (قيد البرمجة)")
+    st.write("- التوكن المتبادل (Mutual Token)")
+    st.info("هذا المسار مخصص للجودة العالية والتمويل المستقل.")
