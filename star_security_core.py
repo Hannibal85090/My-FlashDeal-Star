@@ -1,28 +1,43 @@
-import hashlib
-import time
+import streamlit as st
+import pandas as pd
 
-class FlashDealSecurity:
-    def __init__(self, token_key):
-        self.token_key = token_key
-        self.status = "Initializing..."
+# إعدادات الصفحة - جودة عالية
+st.set_page_config(page_title="FlashDeal Star - Marketing", layout="wide")
 
-    def validate_connection(self):
-        # التأكد من صحة التوكن قبل البدء
-        secure_hash = hashlib.sha256(self.token_key.encode()).hexdigest()
-        if secure_hash:
-            self.status = "Active"
-            return f"System Status: {self.status} | Secure Hash: {secure_hash[:10]}..."
-        return "Connection Failed"
+# تصميم الواجهة (CSS) لجعلها أرقى من "البيضاء الناصعة"
+st.markdown("""
+    <style>
+    .main { background-color: #f5f7f9; }
+    .stButton>button { width: 100%; border-radius: 5px; height: 3em; background-color: #007bff; color: white; }
+    .status-box { padding: 20px; border-radius: 10px; background-color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+    """, unsafe_allow_html=True)
 
-# تشغيل الفحص الفوري
-deal_star = FlashDealSecurity("FlashDeal_Star_2026")
-print(deal_star.validate_connection())
+st.title("🛡️ FlashDeal Secure Dashboard")
+st.subheader("Marketing Department - International Monitoring")
 
-# تفعيل نظام المراقبة الصامت
-def monitor_replies():
-    print("Monitoring Marketing inquiries for +971 and +39...")
-    # محاكاة انتظار الردود من مصلحة التسويق
-    time.sleep(1)
-    print("Status: Listening for incoming tokens...")
+# بيانات محاكاة للأرقام التي راسلناها (الإمارات وإيطاليا)
+data = {
+    "Token ID": ["FD-UAE-84", "FD-ITA-91"],
+    "Origin Region": ["UAE (United Arab Emirates)", "Italy (International)"],
+    "Security Level": ["High (Encrypted)", "High (Encrypted)"],
+    "Status": ["Awaiting Response", "Awaiting Response"],
+    "Last Sync": ["Just Now", "Just Now"]
+}
 
-monitor_replies()
+df = pd.DataFrame(data)
+
+# عرض البيانات في حاوية أنيقة
+with st.container():
+    st.write("### Incoming Secure Inquiries")
+    st.table(df)
+
+# زر التحديث الصامت
+if st.button("Check for New Responses (Done)"):
+    st.toast("Searching for new tokens... Status: Done.")
+    st.balloons()
+
+# قسم الملف الخاص (للمرجع المستقبلي)
+with st.expander("System Logs (Confidential)"):
+    st.write("Parallel Project: High-Quality Framework Active")
+    st.write("Slogan: Talk. Pay. Done.")
