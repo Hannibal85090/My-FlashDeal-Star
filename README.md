@@ -8,6 +8,10 @@ Our core logic is handled by the **FlashDealAgent.sol** smart contract. Judges c
 👉 [View Smart Contract on GitHub](https://github.com/Hannibal85090/FlashDeal-app/blob/main/FlashDealAgent.sol)
 
 > **Identity Verification:** View the official [Agent Identity JSON](https://github.com/Hannibal85090/FlashDeal-app/blob/main/agent_identity.json) for digital footprint verification.
+> 
+> 🔗 **Technical Support Agent (Live Interaction):**
+> To interact with our specialized Technical Agent and get real-time answers about the ULTRA Biometric Shield, use the link below:
+> [**https://g.co/gemini/share/62a0e4666145**](https://g.co/gemini/share/62a0e4666145)
 
 ---
 
