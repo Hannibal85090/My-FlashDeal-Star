@@ -4,7 +4,7 @@
 ---
 
 ### 🤖 The Brain: FlashDeal AI Agent
-Our core logic is handled by the **FlashDealAgent.sol** smart contract. Judges can review the verifiable AI risk management and trade execution logic here:
+Our core logic is handled by the **FlashDealAgent.sol** smart contract. Judges can review the logic here:
 👉 [View Smart Contract on GitHub](https://github.com/Hannibal85090/FlashDeal-app/blob/main/FlashDealAgent.sol)
 
 > **Identity Verification:** View the official [Agent Identity JSON](https://github.com/Hannibal85090/FlashDeal-app/blob/main/agent_identity.json) for digital footprint verification.
@@ -15,13 +15,18 @@ Our core logic is handled by the **FlashDealAgent.sol** smart contract. Judges c
 
 ---
 
-### 🚀 Core Concept
-An autonomous AI financial agent designed for secure, voice-to-transaction operations with integrated on-chain risk management.
+### 🚀 Core Concept & Live Demo
+An autonomous AI financial agent designed for secure, voice-to-transaction operations.
+
+**🌐 Experience the Project Live:**
+👉 [**FlashDeal Live App (Streamlit)**](https://flashdeal-app-njpebdrxnbynngjvkdkhmq.streamlit.app/)
+
+---
 
 ### 🛡️ Security & Compliance
 * **Multi-layer Biometrics:** Integrated fingerprint, facial biometrics, and body movement compatibility.
 * **Mutual Token System:** High-quality security layer using parallel transaction verification.
 * **ERC-8004 Standards:** Fully compliant for Verifiable AI Financial Agents.
 
-### 📂 Assets & Resources
-* **/assets/images**: Contains the UI/UX components (e.g., `headphones.png`, Star Logo).
+---
+**Developed by:** Ali Arfaoui
