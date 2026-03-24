@@ -1,9 +1,10 @@
 import streamlit as st
 import time
 
-# --- أ. إعدادات المنصة والهوية ---
-st.set_page_config(page_title="My FlashDeal Star", page_icon="🌟", layout="wide")
+# --- 1. إعدادات الصفحة والذاكرة (Alpha Master 🔓) ---
+st.set_page_config(page_title="My FlashDeal Star | Professional Pitch", page_icon="🌟", layout="wide")
 
+# ذاكرة النظام (لتحريك Alpha Master)
 if 'history' not in st.session_state:
     st.session_state.history = []
 
@@ -11,138 +12,121 @@ def add_to_memory(action):
     timestamp = time.strftime("%H:%M:%S")
     st.session_state.history.append(f"[{timestamp}] - {action}")
 
-# --- ب. الهندسة الجمالية (CSS) ---
+# --- 2. التصميم البصري المتقدم (CSS) ---
 st.markdown("""
 <style>
+/* خلفية زرقاء غامقة فخمة */
 .stApp {
     background: linear-gradient(135deg, #001a33 0%, #003366 100%);
+    background-size: cover;
 }
-/* العنوان المحاط بالنجوم الملتصقة */
-.title-container { text-align: center; padding-top: 20px; }
-.main-header {
-    display: inline-block;
-    color: white;
-    font-size: 3.8rem;
-    font-weight: bold;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+/* العنوان الرئيسي */
+.main-title {text-align:center; color:#ffffff; text-shadow:0 0 10px gold; font-size:3rem; font-weight:bold; margin-top: -40px;}
+/* الشعار الملكي بوضوح */
+.motto-box {text-align:center; color:#000000; font-size:22px; font-weight:bold; background:rgba(255,255,255,0.9); border-radius:12px; padding:10px; border: 2px solid #ffd700; margin: 10px auto; width: 60%;}
+/* النجمة المتوهجة */
+.star-glow {font-size:70px; color:gold; text-shadow:0 0 20px gold; text-align:center; margin:10px 0;}
+/* **الحل: خانة بيضاء للعناوين الأمنية والتحكم لضمان الوضوح** */
+.white-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
-.star-attached { color: gold; font-size: 3.2rem; vertical-align: middle; }
-
-/* النجمة الكبرى المركزية */
-.mega-star {
-    text-align: center;
-    font-size: 100px;
-    color: gold;
-    text-shadow: 0 0 40px gold;
-    margin: -20px 0;
+/* **نص أسود فاحم داكن داخل الخانة البيضاء** */
+.dark-text-header {
+    color: #000000 !important;
+    font-weight: bold !important;
+    font-size: 24px !important;
+    margin-bottom: 15px !important;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
 }
-
-/* الشعار المعتمد */
-.motto-box {
-    text-align: center;
-    color: #111;
-    font-size: 26px;
-    font-weight: bold;
-    background: #fff;
-    border: 3px solid gold;
-    border-radius: 20px;
-    padding: 12px 50px;
-    width: fit-content;
-    margin: 15px auto;
-}
-
-/* التوقيت الحي باللون السيان */
-.live-clock {
-    text-align: center;
-    color: #00ffff;
-    font-size: 22px;
-    font-weight: bold;
-    font-family: 'Courier New', monospace;
-    margin-bottom: 30px;
-}
-
-/* بطاقة السماعات المعتمدة (صورة 2) */
-.product-frame {
-    padding: 30px;
-    border-radius: 25px;
-    background: rgba(255,255,255,0.05);
-    border: 2px solid #00ffcc;
-    text-align: center;
-}
+/* بطاقة البضاعة */
+.product-card {border: 2px solid #ffd700; padding: 15px; border-radius: 15px; background: rgba(0,0,0,0.5); text-align: center; color: white;}
 </style>
 """, unsafe_allow_html=True)
 
-# --- ج. القاموس واللغات ---
-LANG_DICT = {
-    'Arabic': {'motto': "تكلم ، ادفع ، تم .", 'prod': "سماعات كوفيه ستار", 'price': "99.99 $"},
-    'English': {'motto': "TALK , PAY , DONE .", 'prod': "Cuffie Star Headphones", 'price': "$99.99"},
-    'Italiano': {'motto': "PARLA , PAGA , FATTO .", 'prod': "Cuffie Star", 'price': "99.99 $"}
-}
-
-# --- د. شريط التحكم الجانبي ---
+# --- 3. الشريط الجانبي (Master Alpha 🔓 & Language) ---
 with st.sidebar:
-    selected_lang = st.selectbox("🌐 Language", list(LANG_DICT.keys()))
-    t = LANG_DICT[selected_lang]
+    st.image("https://img.icons8.com/fluency/96/000000/star--v1.png", width=60)
+    selected_lang = st.selectbox("🌐 لغة العرض / Language", ["Arabic", "English", "Italiano", "Français"])
+    
+    # تفويض Alpha Master
     st.divider()
-    with st.expander("📜 Memory Log", expanded=True):
-        for item in reversed(st.session_state.history): st.write(item)
+    acc_level = st.radio("Access Level", ["Standard User", "Master Alpha 🔓"])
+    if acc_level == "Master Alpha 🔓":
+        st.success("Alpha Master Mode: Active")
+        add_to_memory("Alpha Master Authorized")
+    
+    st.divider()
+    with st.expander("📜 سجل الذاكرة / Memory Log", expanded=True):
+        if not st.session_state.history:
+            st.write("Waiting for commands...")
+        else:
+            for item in reversed(st.session_state.history):
+                st.write(item)
 
-# --- هـ. تنفيذ الواجهة الإبداعية (بالترتيب المطلوب) ---
+# --- 4. الهيكل الرئيسي: العنوان، الشعار، النجمة ---
+st.markdown('<h1 class="main-title">🌟 My FlashDeal Star</h1>', unsafe_allow_html=True)
+st.markdown('<p class="motto-box">تكلم ، ادفع ، تم .</p>', unsafe_allow_html=True)
+st.markdown('<div class="star-glow">★</div>', unsafe_allow_html=True)
 
-# 1. العنوان ✨My FlashDeal Star✨
-st.markdown(f'<div class="title-container"><span class="star-attached">✨</span><span class="main-header">My FlashDeal Star</span><span class="star-attached">✨</span></div>', unsafe_allow_html=True)
-
-# 2. النجمة الكبرى تحت العنوان مباشرة
-st.markdown('<div class="mega-star">★</div>', unsafe_allow_html=True)
-
-# 3. الشعار تحت النجمة
-st.markdown(f'<div class="motto-box">{t["motto"]}</div>', unsafe_allow_html=True)
-
-# 4. التوقيت والتاريخ الحي
-current_time = time.strftime("%d/%m/%Y - %H:%M:%S")
-st.markdown(f'<div class="live-clock">{current_time}</div>', unsafe_allow_html=True)
-
-# 5. أزرار التحكم الفوري
+# أزرار المهام السريعة
 cols = st.columns(5)
 with cols[0]: st.button("👤 Face ID")
 with cols[1]: st.button("🔑 Smart Key")
 with cols[2]: st.button("✋ Gesture")
 with cols[3]: st.button("🔒 Lock/Sync")
-with cols[4]: st.button("💎 Trans")
+with cols[4]: st.button("💎 نظام الشفافية")
 
+# عرض التوقيت الحالي بدقة
 st.divider()
+current_time = time.strftime("%d/%M/%Y - %H:%M:%S")
+st.markdown(f"<p style='text-align:center; color:#00ffff; font-size:18px; font-weight:bold;'>🕒 Current Time: {current_time}</p>", unsafe_allow_html=True)
 
-# --- و. قلب النظام (سادن والتحكم بالأصول) ---
-col_saden, col_infra = st.columns(2)
-with col_saden:
-    st.subheader("🛡️ Saden Security Hub")
-    st.camera_input("Biometric Scan", label_visibility="collapsed")
+# --- 5. الأنظمة والتحكم (الحل الجمالي الجديد: خانات بيضاء) ---
+st.divider()
+col_sec, col_infra = st.columns(2)
+
+with col_sec:
+    # استخدام الخانة البيضاء والنص الأسود الداكن لضمان الوضوح
+    st.markdown("""
+    <div class="white-card">
+        <h2 class="dark-text-header">🛡️ Saden Security Hub</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.camera_input("Visual Check", key="saden_cam")
+    with st.expander("Token ID Authentication", expanded=True):
+        st.text_input("Mutual Token ID", type="password")
+        st.button("Verify🛡️")
+
 with col_infra:
-    st.subheader("🏠 Infrastructure Control")
-    st.button("🚗 Start Car Engine", use_container_width=True)
-    st.button("🏠 Home Security", use_container_width=True)
+    st.markdown("""
+    <div class="white-card">
+        <h2 class="dark-text-header">🏠 Infrastructure Control</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    infra_cols = st.columns(2)
+    with infra_cols[0]:
+        if st.button("🚗 Start Engine"): add_to_memory("Car Started Remotely")
+    with infra_cols[1]:
+        if st.button("🏠 Home Security"): add_to_memory("Home Secured")
+    
+    st.image("https://img.icons8.com/fluency/96/000000/home.png", width=60)
 
+# --- 6. الوكيل الذكي وقسم البضاعة والثمن (دمج الموسيقى والاحتفالية) ---
 st.divider()
-
-# --- ز. الوكيل والمنتج النهائي (بدون أي دخلاء) ---
-col_agent, col_prod = st.columns([1.5, 1])
+col_agent, col_product = st.columns([1.5, 1])
 
 with col_agent:
     st.subheader("🤝 Smart Agent")
-    st.text_input("Deal Description", placeholder="اكتب تفاصيل الصفقة...")
-    if st.button("إبرام الصفقة 🚀", type="primary", use_container_width=True):
-        st.balloons()
-        add_to_memory(f"Deal for {t['prod']} Executed")
+    deal_desc = st.text_input("Deal context", placeholder="e.g.Buying raw materials")
+    
+    # زر إبرام الصفقة مع الموسيقى والاحتفالية
+    if st.button("إ
 
-with col_prod:
-    # تم تثبيت سماعات كوفيه ستار فقط (صورة 2) وحذف الـ 199.99 تماماً
-    st.markdown(f"""
-    <div class="product-frame">
-        <h3 style="color: #00ffcc;">🎧 {t['prod']}</h3>
-        <h2 style="color: #ffffff;">{t['price']}</h2>
-        <div style="font-size: 80px;">🎧</div>
-        <p style="color: #888; font-size: 14px; margin-top:15px;">Innovation Team Edition 2026</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.chat_input("Sony-Agent: Pitch mode ready...")
