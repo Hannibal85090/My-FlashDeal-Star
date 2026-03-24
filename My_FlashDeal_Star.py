@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 # --- 1. إعدادات الصفحة والذاكرة الموحدة ---
-st.set_page_config(page_title="FlashDeal Star | Certified Edition", page_icon="🌟", layout="wide")
+st.set_page_config(page_title="FlashDeal Star | Final Pitch", page_icon="🌟", layout="wide")
 
 if 'history' not in st.session_state:
     st.session_state.history = []
@@ -11,7 +11,7 @@ def add_to_memory(action):
     timestamp = time.strftime("%H:%M:%S")
     st.session_state.history.append(f"[{timestamp}] - {action}")
 
-# --- 2. التنسيق الجمالي (أوراق الصنوبر الزرقاء والستايل الفخم) ---
+# --- 2. التنسيق الجمالي (أوراق الصنوبر الزرقاء والاحتفالية) ---
 st.markdown("""
 <style>
 /* خلفية أوراق الصنوبر الزرقاء */
@@ -23,17 +23,17 @@ st.markdown("""
 /* العنوان الرئيسي */
 .main-title {text-align:center; color:#000000; text-shadow:0 0 12px #ffffff; font-size:3.5rem; font-weight:bold; margin-top: -40px;}
 /* الشعار الأسود (Motto) */
-.motto-black {text-align:center; color:#000000; font-size:24px; font-weight:bold; background:rgba(255,255,255,0.85); border-radius:15px; padding:12px; border: 2px solid #ffd700; margin: 10px auto; width: 55%; box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+.motto-black {text-align:center; color:#000000; font-size:24px; font-weight:bold; background:rgba(255,255,255,0.85); border-radius:15px; padding:12px; border: 2px solid #ffd700; margin: 10px auto; width: 60%; box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
 /* النجمة الكبرى */
 .star {font-size:100px; color:gold; text-shadow:0 0 35px gold; text-align:center; margin:5px 0;}
 /* بطاقة الشهادة */
-.cert-card {border: 3px double gold; padding: 25px; border-radius: 15px; background: rgba(0,0,0,0.7); text-align: center; color: white; margin-top: 20px;}
+.cert-card {border: 3px double gold; padding: 25px; border-radius: 15px; background: rgba(0,0,0,0.8); text-align: center; color: white; margin-top: 20px;}
 /* بطاقة المنتج */
 .glass-product {padding:20px; border-radius:20px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); backdrop-filter:blur(10px); text-align:center;}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. القاموس اللغوي (4 لغات كاملة) ---
+# --- 3. القاموس اللغوي (4 لغات) ---
 LANG_DICT = {
     'English': {'motto': "TALK , PAY , DONE .", 'saden': "Saden Security Token", 'agent': "🤝 Smart Agent", 'exec': "Execute Deal 🚀", 'cert': "OFFICIAL DEAL CERTIFICATE", 'price': "$199.99", 'prod': "FlashDeal Smart Star"},
     'Arabic': {'motto': "تكلم ، ادفع ، تم .", 'saden': "أمان سادن: التوكن المتبادل", 'agent': "🤝 الوكيل الذكي", 'exec': "إبرام الصفقة 🚀", 'cert': "شهادة الصفقة الرسمية", 'price': "199.99 $", 'prod': "نجمة فلاش ديل الذكية"},
@@ -44,7 +44,7 @@ LANG_DICT = {
 # --- 4. الشريط الجانبي (Master Alpha 🔓) ---
 with st.sidebar:
     st.image("https://img.icons8.com/fluency/96/000000/star--v1.png", width=55)
-    selected_lang = st.selectbox("🌐 Global Language", list(LANG_DICT.keys()))
+    selected_lang = st.selectbox("🌐 Language", list(LANG_DICT.keys()))
     t = LANG_DICT[selected_lang]
     st.divider()
     
@@ -60,91 +60,82 @@ with st.sidebar:
             for item in reversed(st.session_state.history):
                 st.write(item)
 
-# --- 5. الهيكل الرئيسي للواجهة (العنوان -> الشعار -> الأزرار) ---
+# --- 5. الهيكل الرئيسي (عنوان -> شعار -> أزرار) ---
 
-# أ. العنوان الرئيسي
+# أولاً: العنوان الرئيسي
 st.markdown("<h1 class='main-title'>🌟 My FlashDeal Star 🌟</h1>", unsafe_allow_html=True)
 
-# ب. الشعار الأسود (Motto) - مفعل بالكامل
+# ثانياً: الشعار الأسود (Motto)
 st.markdown(f"<p class='motto-black'>{t['motto']}</p>", unsafe_allow_html=True)
 
-# ج. النجمة الكبيرة الاحتفالية
+# النجمة الكبيرة
 st.markdown('<div class="star">★</div>', unsafe_allow_html=True)
 
-# د. أزرار التحكم العلوية الأربعة (تفاعلية بالكامل)
+# ثالثاً: أزرار التحكم العلوية
 top_cols = st.columns(4)
-if top_cols[0].button("✋ Sign / Gesture"): add_to_memory("Hand Gesture Detected")
-if top_cols[1].button("🔒 Lock / Security"): add_to_memory("System Locked Securely")
-if top_cols[2].button("👤 Face / Voice"): add_to_memory("Biometric Scan Active")
-if top_cols[3].button("🔑 Key / Engine"): add_to_memory("Smart Key Engaged")
+if top_cols[0].button("✋ Sign"): add_to_memory("Sign Detected")
+if top_cols[1].button("🔒 Lock"): add_to_memory("System Locked")
+if top_cols[2].button("👤 Face"): add_to_memory("Face Scan Active")
+if top_cols[3].button("🔑 Key"): add_to_memory("Key Engaged")
 
 st.divider()
 
-# --- 6. الوكيل الذكي وقسم المنتج (مع الاحتفالية التلقائية والشهادة) ---
+# --- 6. الوكيل الذكي والمنتج (الاحتفالية والشهادة) ---
 c_left, c_right = st.columns([1.5, 1])
 
 with c_left:
     st.subheader(t['agent'])
-    deal_desc = st.text_input("Enter your deal description / أدخل تفاصيل الصفقة", placeholder="e.g. Real Estate Contract 2026")
+    deal_desc = st.text_input("Deal details / تفاصيل الصفقة", placeholder="Ex: Supply Chain Agreement")
     
-    # زر إبرام الصفقة (الزناد للاحتفالية والشهادة)
+    # عند الضغط على الزر تنطلق الاحتفالية والشهادة والموسيقى تلقائياً
     if st.button(t['exec'], type="primary", use_container_width=True):
-        # 1. إطلاق الاحتفالية (بالونات، صنوبر متساقط، موسيقى)
         st.balloons()
         st.snow()
         st.audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
         
-        # 2. عرض شهادة الصفقة (popup-style)
         st.success("TRANSACTION SECURED! ✅")
         st.markdown(f"""
         <div class="cert-card">
             <h2 style="color: gold;">{t['cert']}</h2>
             <hr style="border: 0.5px solid gold;">
-            <p style="font-size: 20px;"><b>{deal_desc if deal_desc else "FlashDeal Standard Asset"}</b></p>
+            <p style="font-size: 20px;"><b>{deal_desc if deal_desc else "Standard FlashDeal Asset"}</b></p>
             <p>Timestamp: {time.strftime("%d/%m/%Y - %H:%M:%S")}</p>
             <p style="color: #00ffcc; font-weight: bold;">Verified by Master Alpha 🔓</p>
-            <p style="font-size: 12px; color: #888;">Security Hash: Saden-Mutual-Token-2026-X99</p>
+            <p style="font-size: 10px; color: #888;">Hash: SADEN-2026-CONFIRMED</p>
         </div>
         """, unsafe_allow_html=True)
-        
-        add_to_memory(f"Deal Finalized: {deal_desc}")
+        add_to_memory(f"Deal Certified: {deal_desc}")
 
 with c_right:
+    # سد ثغرة الرابط المكسور باستخدام أيقونة احترافية مضمونة
     st.markdown(f"""
     <div class="glass-product">
         <h4 style="color: gold;">💎 {t['prod']}</h4>
-        <p style="font-size: 28px; color: #00ffcc; font-weight: bold;">{t['price']}</p>
-        <img src="https://img.icons8.com/fluency/180/000000/star-burst.png" width="120">
-        <p style="font-size: 12px; color: #aaa;">Limited Innovation Team Edition</p>
+        <p style="font-size: 32px; color: #00ffcc; font-weight: bold; margin-bottom: 0px;">{t['price']}</p>
+        <div style="font-size: 100px; margin: 10px 0;">⭐</div>
+        <p style="font-size: 14px; color: #aaa;">Limited Innovation Team Edition</p>
     </div>
     """, unsafe_allow_html=True)
 
-# --- 7. سادن، الكاميرا، والتحكم المنزلي ---
+# --- 7. سادن والتحكم المنزلي والسيارة ---
 st.divider()
-tab1, tab2 = st.tabs(["🔒 Saden Mutual Token", "🏠 Smart Infrastructure"])
+tab1, tab2 = st.tabs(["🔒 Saden Security", "🏠 Smart Home & Car"])
 
 with tab1:
     st.markdown(f"### {t['saden']}")
     sc1, sc2 = st.columns([3, 1])
-    with sc1: st.text_input("Enter Mutual Token Code", type="password", key="saden_tk")
+    with sc1: st.text_input("Mutual Token Code", type="password", key="saden_key")
     with sc2: 
-        if st.button("Verify Token 🛡️"): 
-            st.toast("Token Synchronized!")
-            add_to_memory("Saden Token Verified")
-    st.camera_input("Visual Verification Cam")
+        if st.button("Verify🛡️"): 
+            st.toast("Linked!")
+            add_to_memory("Token Verified")
+    st.camera_input("Identity Verification")
 
 with tab2:
-    st.info("التحكم الذكي في المنزل والسيارة / Smart Home & Car Control")
     ca, cb = st.columns(2)
     if ca.button("🚗 Start Car Engine"): 
-        st.success("Engine Started via FlashDeal Link!")
-        add_to_memory("Car Started Remotely")
-    if cb.button("🏠 Lock/Unlock Home"): 
-        st.info("Home Security Status Updated")
-        add_to_memory("Home Lock Toggled")
+        st.success("Engine Started!"); add_to_memory("Car Active")
+    if cb.button("🏠 Home Security"): 
+        st.info("Home Link Active"); add_to_memory("Home Managed")
 
-# --- 8. وكيل Sony-Agent الصوتي ---
-chat_val = st.chat_input("Sony-Agent: I am listening for your next innovation...")
-if chat_val:
-    add_to_memory(f"User Request: {chat_val}")
-    st.write(f"Sony-Agent: Processing '{chat_val}'...")
+st.chat_input("Sony-Agent: Pitch Day mode enabled. How can I assist?")
