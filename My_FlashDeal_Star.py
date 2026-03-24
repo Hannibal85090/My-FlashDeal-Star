@@ -1,10 +1,8 @@
 import streamlit as st
 import time
 
-# --- 1. إعداد الصفحة الأساسي ---
 st.set_page_config(page_title="My FlashDeal Star", page_icon="🌟", layout="wide")
 
-# --- 2. إدارة الذاكرة والحالة (حفاظاً على كل الوظائف) ---
 if 'history' not in st.session_state:
     st.session_state.history=[]
 
@@ -12,7 +10,6 @@ def add_to_memory(action):
     timestamp=time.strftime("%H:%M:%S")
     st.session_state.history.append(f"[{timestamp}] - {action}")
 
-# --- 3. الوظائف التقنية الأصلية من الكود 1 ---
 def trigger_emergency_protocol():
     st.error("🚨 SOS: Emergency Protocol Activated!")
     add_to_memory("SOS Triggered - Alerts sent to Master Alpha Hub")
@@ -40,25 +37,22 @@ def handle_key():
     st.success("Access granted!")
     add_to_memory("Key Triggered")
 
-# --- 4. التنسيق الجمالي CSS (من الكود 1) ---
 st.markdown("""
 <style>
 body{background:linear-gradient(135deg,#00050a 0%,#011627 100%);color:#ffffff;}
-.star-container{font-size:100px;color:gold;text-shadow:0 0 20px #ffd700;text-align:center;margin:10px 0;}
-.motto-style{text-align:center;color:gold;font-size:24px;font-weight:bold;margin-top:-10px;letter-spacing:1px;}
+.star{font-size:120px;color:gold;text-shadow:0 0 20px #ffd700,0 0 40px #ffcc00;text-align:center;margin:40px 0;}
+.icon-circle{display:inline-block;margin:20px;font-size:40px;color:#ffcc00;border:2px solid #ffcc00;border-radius:50%;padding:20px;}
 .glass-card{padding:25px;border-radius:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(15px);margin-bottom:20px;}
 .log-text{font-size:0.85rem;color:#4facfe;font-family:'Courier New',monospace;}
 </style>
 """,unsafe_allow_html=True)
 
-# --- 5. القواميس واللغات (توسيع لتشمل شعار الكود 2) ---
 LANG_DICT={
-'English':{'motto':"TALK , PAY , DONE .",'saden':"Saden Security: Mutual Token",'home_car':"Smart Control 🏠🚗",'sync':"Sync Token 🛡️",'car':"Start Car 🔑",'home':"Manage Home 🏠",'sos':"Activate SOS Mode 🔔",'mem':"📜 Unified Memory Log",'cam':"Verification Camera"},
-'Français':{'motto':"PARLE , PAIE , TERMINÉ .",'saden':"Sécurité Saden: Token Mutuel",'home_car':"Contrôle Maison & Voiture 🏠🚗",'sync':"Synchroniser 🛡️",'car':"Démarrer 🔑",'home':"Gérer Maison 🏠",'sos':"Activer SOS 🔔",'mem':"📜 Journal de Mémoire",'cam':"Caméra de Vérification"},
-'Italiano':{'motto':"PARLA , PAGA , FATTO .",'saden':"Sicurezza Saden: Token Reciproco",'home_car':"Controllo Casa e Auto 🏠🚗",'sync':"Sincronizza 🛡️",'car':"Avvia Auto 🔑",'home':"Gestisci Casa 🏠",'sos':"Attiva SOS 🔔",'mem':"📜 Registro di Memoria",'cam':"Telecamera di Verifica"},
-'Arabic':{'motto':"تكلم ، ادفع ، تم .",'saden':"أمان سادن: التوكن المتبادل",'home_car':"التحكم الذكي 🏠🚗",'sync':"مزامنة التوكن 🛡️",'car':"تشغيل السيارة 🔑",'home':"إدارة المنزل 🏠",'sos':"تفعيل وضع الطوارئ 🔔",'mem':"📜 سجل الذاكرة الموحد",'cam':"كاميرا التحقق"}}
+'English':{'motto':"Talk. Pay. Done.",'saden':"Saden Security: Mutual Token",'home_car':"Smart Control 🏠🚗",'buy':"Global Deal Execution 🚀",'success':"Process Completed Successfully!",'sync':"Sync Token 🛡️",'car':"Start Car 🔑",'home':"Manage Home 🏠",'sos':"Activate SOS Mode 🔔",'mem':"📜 Unified Memory Log"},
+'Français':{'motto':"Parlez. Payez. Fait.",'saden':"Sécurité Saden: Token Mutuel",'home_car':"Contrôle Maison & Voiture 🏠🚗",'buy':"Conclure l'Accord 🚀",'success':"Opération terminée!",'sync':"Synchroniser 🛡️",'car':"Démarrer 🔑",'home':"Gérer Maison 🏠",'sos':"Activer SOS 🔔",'mem':"📜 Journal de Mémoire"},
+'Italiano':{'motto':"Parla. Paga. Fatto.",'saden':"Sicurezza Saden: Token Reciproco",'home_car':"Controllo Casa e Auto 🏠🚗",'buy':"Concludi l'Affare 🚀",'success':"Operazione riuscita!",'sync':"Sincronizza 🛡️",'car':"Avvia Auto 🔑",'home':"Gestisci Casa 🏠",'sos':"Attiva SOS 🔔",'mem':"📜 Registro di Memoria"},
+'Arabic':{'motto':"تحدث. ادفع. تم.",'saden':"أمان سادن: التوكن المتبادل",'home_car':"التحكم الذكي 🏠🚗",'buy':"إبرام الصفقة العالمية 🚀",'success':"تمت العملية بنجاح!",'sync':"مزامنة التوكن 🛡️",'car':"تشغيل السيارة 🔑",'home':"إدارة المنزل 🏠",'sos':"تفعيل وضع الطوارئ 🔔",'mem':"📜 سجل الذاكرة الموحد"}}
 
-# --- 6. الشريط الجانبي (Sidebar) ---
 with st.sidebar:
     st.image("https://img.icons8.com/fluency/96/000000/star--v1.png",width=60)
     selected_lang=st.selectbox("🌐 Global Language",list(LANG_DICT.keys()))
@@ -74,29 +68,22 @@ with st.sidebar:
     st.divider()
     acc=st.radio("Access Level",["Standard","Master Alpha 🔓"])
 
-# --- 7. الواجهة الرئيسية (الدمج المطلوب) ---
+# --- العنوان الجديد مع التاريخ والتوقيت ---
 current_time=time.strftime("%d/%m/%Y - %H:%M:%S")
+st.markdown("<h1 style='text-align:center;color:#000000;text-shadow:0 0 10px #444444;'>🌟 My FlashDeal Star 🌟</h1>",unsafe_allow_html=True)
 
-# العنوان الرئيسي
-st.markdown("<h1 style='text-align:center;color:#ffffff;text-shadow:0 0 10px #444444;'>🌟 My FlashDeal Star 🌟</h1>",unsafe_allow_html=True)
+# ✅ إضافة الشعار من الكود الثاني
+st.markdown(f"<p style='text-align:center;color:gold;font-size:22px;'>{t['motto']}</p>", unsafe_allow_html=True)
 
-# إضافة الشعار من الكود 2 (تحت العنوان مباشرة)
-st.markdown(f"<p class='motto-style'>{t['motto']}</p>", unsafe_allow_html=True)
-
-# إضافة النجمة الكبرى (بعد الشعار)
-st.markdown('<div class="star-container">★</div>',unsafe_allow_html=True)
-
-# التوقيت
 st.markdown(f"<p style='text-align:center;color:#4facfe;'>🕒 Current Time: {current_time}</p>",unsafe_allow_html=True)
+st.markdown('<div class="star">★</div>',unsafe_allow_html=True)
 
-# --- 8. أزرار التفاعل (الأزرار الـ 4 الأصلية) ---
 cols=st.columns(4)
 if cols[0].button("✋ Hand / Sign"):handle_sign()
 if cols[1].button("🔒 Lock / Sync"):handle_lock()
 if cols[2].button("👤 Face / Voice"):handle_face()
 if cols[3].button("🔑 Key / Car"):handle_key()
 
-# --- 9. منطقة التوكن (من الكود 1) ---
 st.markdown(f'<div class="glass-card"><h3>🔒 {t["saden"]}</h3>',unsafe_allow_html=True)
 c1,c2=st.columns([3,1])
 with c1:st.text_input("Token ID",type="password",label_visibility="collapsed",key="token_main")
@@ -104,24 +91,13 @@ with c2:
     if st.button(t['sync']):st.success("Linked! ✅");add_to_memory(f"Token Synced: {selected_lang}")
 st.markdown('</div>',unsafe_allow_html=True)
 
-# --- 10. الإضافات التفاعلية الجديدة (الكاميرا والتبادل) ---
-tab1,tab2,tab3=st.tabs(["🎙️ Voice","📸 Camera","⌨️ Text"])
-
+tab1,tab2,tab3=st.tabs(["🎙️ Voice","👋 Sign","⌨️ Text"])
 with tab1:
     if st.button(f"{t['motto']} (Mic Active)"):add_to_memory("Voice command engaged")
-
-with tab2:
-    st.subheader(f"📸 {t['cam']}")
-    cam_photo = st.camera_input("Take a verify photo")
-    if cam_photo:
-        st.success("Identity Verified! ✅")
-        add_to_memory("Camera Photo Taken")
-
 with tab3:
     chat_val=st.chat_input("Sony-Agent...")
     if chat_val:add_to_memory(f"Chat: {chat_val}")
 
-# --- 11. التحكم في المنزل والسيارة ---
 st.markdown(f"### {t['home_car']}")
 ca,cb=st.columns(2)
 with ca:
@@ -132,3 +108,4 @@ with cb:
     if st.button(t['home']):st.toast("🏠 Welcome Home Mode Active");add_to_memory("Home Managed")
 
 st.divider()
+colA,colB=st.columns([1,2])
