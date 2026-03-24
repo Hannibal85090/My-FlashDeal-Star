@@ -124,3 +124,4 @@ with cb:
     if st.button(t['home']):st.toast("🏠 Welcome Home Mode Active");add_to_memory("Home Managed")
 
 st.divider()
+
