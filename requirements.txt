@@ -1,4 +1,6 @@
-streamlit==1.31.0
-google-generativeai
+streamlit
+opencv-python-headless
+mediapipe
+protobuf
 numpy
-pandas
+streamlit-mic-recorder
