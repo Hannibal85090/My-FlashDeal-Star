@@ -3,7 +3,6 @@ import time
 import cv2
 import face_recognition
 import numpy as np
-import os
 
 st.set_page_config(page_title="My FlashDeal Star", page_icon="🌟", layout="wide")
 
@@ -11,15 +10,13 @@ st.set_page_config(page_title="My FlashDeal Star", page_icon="🌟", layout="wid
 if 'history' not in st.session_state:
     st.session_state.history = []
 
-LOG_FILE = "log.txt"
-
 def add_to_memory(action, status="OK"):
     timestamp = time.strftime("%d/%m/%Y - %H:%M:%S")
     log_entry = {"time": timestamp, "action": action, "status": status}
     st.session_state.history.append(log_entry)
 
     # حفظ في ملف خارجي
-    with open(LOG_FILE, "a", encoding="utf-8") as f:
+    with open("log.txt", "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}] - {action} ({status})\n")
 
 # --- بروتوكولات الأمان ---
@@ -67,23 +64,13 @@ if acc == "Master Alpha 🔓":
 else:
     st.warning("SOS Mode requires Master Alpha access")
 
-# سجل الأحداث المباشر
-st.subheader("📜 Unified Memory Log (Session)")
+# سجل الأحداث
+st.subheader("📜 Unified Memory Log")
 if not st.session_state.history:
     st.write("No active logs.")
 else:
     for item in reversed(st.session_state.history):
         st.write(f"[{item['time']}] - {item['action']} ({item['status']})")
-
-# عرض محتوى log.txt من الملف الخارجي
-st.subheader("📂 External Log File (Persistent)")
-if os.path.exists(LOG_FILE):
-    with open(LOG_FILE, "r", encoding="utf-8") as f:
-        logs = f.readlines()
-    for line in reversed(logs[-20:]):  # عرض آخر 20 حدث فقط لتخفيف الحمل
-        st.text(line.strip())
-else:
-    st.write("No external log file found.")
 
 # التعرف على الوجه
 st.subheader("👤 Biometric Face Recognition")
