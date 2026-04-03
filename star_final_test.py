@@ -1,106 +1,110 @@
 import streamlit as st
 import cv2
-import os
 import sqlite3
-import secrets
-from deepface import DeepFace
-import PIL.Image
 import numpy as np
+from deepface import DeepFace
+from firebase_admin import credentials, initialize_app, storage
 
-# --- 1. الإعدادات اللوجستية (Zero-Error Setup) ---
-def initial_setup():
-    if not os.path.exists("faces"):
-        os.makedirs("faces")
-    conn = sqlite3.connect("flashdeal_star_final.db", check_same_thread=False)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS users 
-                 (name TEXT, image_path TEXT, secret_code TEXT, token TEXT)''')
-    conn.commit()
-    return conn, c
+st.title("🔐 Face Recognition & Motion Login System")
 
-conn, c = initial_setup()
+# --------------------------
+# 🔗 إعداد Firebase للتخزين السحابي
+# --------------------------
+cred = credentials.Certificate("firebase_key.json")  # ملف مفتاح الخدمة
+initialize_app(cred, {"storageBucket": "your-bucket-name.appspot.com"})
+bucket = storage.bucket()
 
-# --- 2. واجهة المستخدم (Talk. Pay. Done.) ---
-st.set_page_config(page_title="FlashDeal Star Final Test", page_icon="⭐", layout="centered")
+# الاتصال بقاعدة بيانات SQLite (يمكن استبدالها بـ سحابية مثل Supabase)
+conn = sqlite3.connect("database.db")
+c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL,
+    image_url TEXT NOT NULL,
+    embedding BLOB NOT NULL
+)''')
+conn.commit()
 
-st.title("⭐ My FlashDeal Star")
-st.markdown("### `Talk. Pay. Done.`")
-st.info("النسخة النهائية للاختبار والتدقيق البرمجي")
+menu = ["Register", "Login"]
+choice = st.sidebar.selectbox("Menu", menu)
 
-menu = ["التحقق والدفع (Login)", "تسجيل مستخدم (Register)"]
-choice = st.sidebar.selectbox("القائمة البرمجية", menu)
+# --------------------------
+# 🧾 تسجيل مستخدم جديد
+# --------------------------
+if choice == "Register":
+    st.subheader("Register New Face")
+    name = st.text_input("Enter your name")
+    image_file = st.file_uploader("Upload your face image", type=["jpg", "png"])
 
-# --- 3. وظيفة التسجيل (التثبت من البيانات) ---
-if choice == "تسجيل مستخدم (Register)":
-    st.subheader("📸 تسجيل الهوية البيومترية")
-    with st.form("registration_form"):
-        name = st.text_input("الاسم الكامل")
-        s_code = st.text_input("الرمز السري (Secret Code)", type="password")
-        img_file = st.camera_input("التقط صورة التسجيل")
-        submit = st.form_submit_button("اعتماد التسجيل النهائي")
+    if st.button("Save"):
+        if image_file and name:
+            # رفع الصورة للسحابة
+            blob = bucket.blob(f"faces/{name}.jpg")
+            blob.upload_from_file(image_file, content_type="image/jpeg")
+            image_url = blob.public_url
 
-        if submit and img_file and name and s_code:
-            path = f"faces/{name.replace(' ', '_')}.jpg"
-            # حفظ الصورة بدقة
-            img = PIL.Image.open(img_file)
-            img.save(path)
-            
-            c.execute("INSERT INTO users (name, image_path, secret_code) VALUES (?, ?, ?)", 
-                      (name, path, s_code))
+            # استخراج embedding
+            with open("temp.jpg", "wb") as f:
+                f.write(image_file.getbuffer())
+            embedding = DeepFace.represent("temp.jpg", model_name="Facenet", enforce_detection=False)[0]["embedding"]
+            embedding_bytes = np.array(embedding).tobytes()
+
+            c.execute("INSERT INTO users (name, image_url, embedding) VALUES (?, ?, ?)", (name, image_url, embedding_bytes))
             conn.commit()
-            st.success(f"تم تسجيل {name} بنجاح في قاعدة بيانات FlashDeal.")
+            st.success("User registered successfully!")
 
-# --- 4. وظيفة التحقق والدفع (المنطق الموازي) ---
-elif choice == "التحقق والدفع (Login)":
-    st.subheader("🔐 بوابة العبور الآمن")
-    img_file = st.camera_input("مسح الوجه للتحقق")
+# --------------------------
+# 🔓 تسجيل الدخول بالوجه + كشف الحركة
+# --------------------------
+elif choice == "Login":
+    st.subheader("Login with Face & Motion Detection")
 
-    if img_file:
-        # حفظ مؤقت للمقارنة
-        temp_path = "temp_test.jpg"
-        img = PIL.Image.open(img_file)
-        img.save(temp_path)
-        
-        found_user = None
-        
-        with st.spinner("جاري التمحيص والمطابقة..."):
-            c.execute("SELECT name, image_path, secret_code FROM users")
-            users = c.fetchall()
-            
-            for u_name, u_path, u_code in users:
-                try:
-                    # التدقيق باستخدام VGG-Face لسرعة الاستجابة
-                    check = DeepFace.verify(img1_path=temp_path, img2_path=u_path, 
-                                            model_name='VGG-Face', enforce_detection=True)
-                    if check["verified"]:
-                        found_user = u_name
-                        break
-                except Exception as e:
-                    continue
+    run = st.checkbox("Start Camera")
+    camera = cv2.VideoCapture(0)
+    FRAME_WINDOW = st.image([])
 
-        if found_user:
-            # توليد التوكن المتبادل (Mutual Token) كما اتفقنا
-            m_token = secrets.token_hex(12).upper()
-            st.session_state['current_token'] = m_token
-            
-            st.success(f"تم التحقق بنجاح! مرحباً {found_user}")
-            st.markdown(f"---")
-            st.write(f"🎫 **Mutual Token:** `{m_token}`")
-            
-            if st.button("تأفيذ العملية: Talk. Pay. Done."):
-                st.balloons()
-                st.success("تمت المعاملة بأمان عبر My FlashDeal Star")
-        else:
-            st.error("فشل التحقق البصري.")
-            # خيار الرمز السري كبديل جودة
-            input_code = st.text_input("أدخل الرمز السري للاستمرارية", type="password")
-            if st.button("دخول يدوي"):
-                c.execute("SELECT name FROM users WHERE secret_code=?", (input_code,))
-                res = c.fetchone()
-                if res:
-                    st.success(f"تم الدخول بالرمز السري! مرحباً {res[0]}")
-                else:
-                    st.error("الرمز غير صحيح.")
+    prev_frame = None
+    while run:
+        ret, frame = camera.read()
+        if not ret:
+            st.error("Camera error")
+            break
 
-# --- 5. إغلاق الاتصال ---
-# conn.close() # يفضل تركه مفتوحاً أثناء تشغيل Streamlit
+        FRAME_WINDOW.image(frame, channels="BGR")
+
+        # كشف الحركة
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.GaussianBlur(gray, (21, 21), 0)
+
+        if prev_frame is None:
+            prev_frame = gray
+            continue
+
+        diff = cv2.absdiff(prev_frame, gray)
+        thresh = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)[1]
+        motion_level = np.sum(thresh) / 255
+
+        if motion_level > 5000:  # عتبة للحركة
+            st.warning("Motion detected!")
+
+        prev_frame = gray
+
+        # حفظ صورة مؤقتة
+        cv2.imwrite("temp.jpg", frame)
+
+        # التحقق من الوجه
+        c.execute("SELECT name, embedding FROM users")
+        users = c.fetchall()
+
+        temp_embedding = DeepFace.represent("temp.jpg", model_name="Facenet", enforce_detection=False)[0]["embedding"]
+        temp_embedding = np.array(temp_embedding)
+
+        for user in users:
+            stored_embedding = np.frombuffer(user[1], dtype=np.float64)
+            distance = np.linalg.norm(temp_embedding - stored_embedding)
+            if distance < 0.7:
+                st.success(f"Welcome {user[0]} 🎉")
+                run = False
+                break
+
+    camera.release()
