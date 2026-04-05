@@ -2,4 +2,4 @@ cmake
 build-essential
 libatlas-base-dev
 libx11-dev
-libgtk-3-dev
+libgtk-dev
