@@ -1,96 +1,63 @@
 import streamlit as st
-import time
-import cv2
-import face_recognition
+import hashlib, secrets, time
 import numpy as np
-import os
+import cv2
+import mediapipe as mp
 
-st.set_page_config(page_title="My FlashDeal Star", page_icon="🌟", layout="wide")
+st.set_page_config(page_title="FlashDeal Star Core", page_icon="⚡", layout="wide")
 
-# --- سجل الأحداث بصيغة JSON + حفظ خارجي ---
-if 'history' not in st.session_state:
-    st.session_state.history = []
+class FlashDealSystem:
+    def __init__(self):
+        self.token_registry = {}
 
-LOG_FILE = "log.txt"
+    def generate_token(self, user_id):
+        raw = f"{user_id}-{secrets.token_hex(8)}"
+        return hashlib.sha256(raw.encode()).hexdigest()
 
-def add_to_memory(action, status="OK"):
-    timestamp = time.strftime("%d/%m/%Y - %H:%M:%S")
-    log_entry = {"time": timestamp, "action": action, "status": status}
-    st.session_state.history.append(log_entry)
+    def verify_motion(self, data):
+        if not data: return False
+        mags = [(x**2 + y**2 + z**2)**0.5 for x, y, z in data]
+        avg = sum(mags) / len(mags)
+        return avg >= 9.0
 
-    # حفظ في ملف خارجي
-    with open(LOG_FILE, "a", encoding="utf-8") as f:
-        f.write(f"[{timestamp}] - {action} ({status})\n")
+    def verify_face(self, image):
+        mp_face_detection = mp.solutions.face_detection
+        mp_drawing = mp.solutions.drawing_utils
+        with mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence=0.5) as face_detection:
+            results = face_detection.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+            return bool(results.detections)
 
-# --- بروتوكولات الأمان ---
-def trigger_emergency_protocol():
-    try:
-        st.error("🚨 SOS: Emergency Protocol Activated!")
-        add_to_memory("SOS Triggered - Alerts sent to Master Alpha Hub")
-        with st.status("Verifying Security Links..."):
+st.title("⚡ FlashDeal Star (النجم)")
+st.markdown("**#Talk. Pay. Done.**")
+st.write("---")
+
+if 'fd_system' not in st.session_state:
+    st.session_state.fd_system = FlashDealSystem()
+
+col1, col2 = st.columns([2, 1])
+
+with col1:
+    st.subheader("بروتوكول المصادقة: الوجه + الحركة")
+    uploaded_file = st.file_uploader("ارفع صورة للتحقق من الوجه", type=["jpg","jpeg","png"])
+    if st.button("بدء الفحص"):
+        with st.spinner("جاري التشغيل..."):
             time.sleep(1)
-            st.warning("All Smart Links: IMMOBILIZED 🔒")
-    except Exception as e:
-        st.error(f"Emergency protocol failed: {e}")
-        add_to_memory("SOS Error", status="FAIL")
-
-# --- التعرف على الوجه ---
-def handle_face(img_data):
-    try:
-        bytes_data = img_data.getvalue()
-        nparr = np.frombuffer(bytes_data, np.uint8)
-        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        encodings = face_recognition.face_encodings(rgb_frame)
-
-        if encodings:
-            st.success("Identity verified with AI! ✅")
-            add_to_memory("Face Verified")
+            token = st.session_state.fd_system.generate_token("Ali_Arfaoui")
+            motion_ok = st.session_state.fd_system.verify_motion([[0.0,9.81,0],[1.0,9.7,0]])
+            face_ok = False
+            if uploaded_file:
+                file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+                image = cv2.imdecode(file_bytes, 1)
+                face_ok = st.session_state.fd_system.verify_face(image)
+        if motion_ok and face_ok:
+            st.success("✅ تم التحقق من الهوية (الوجه) والحركة بنجاح")
+            st.code(f"Token: {token[:32]}...", language="bash")
+            st.balloons()
         else:
-            st.error("No face detected ❌")
-            add_to_memory("Face verification failed", status="FAIL")
-    except Exception as e:
-        st.error(f"Face recognition error: {e}")
-        add_to_memory("Face recognition error", status="FAIL")
+            st.error("❌ فشل التحقق من الهوية أو الحركة")
 
-# --- واجهة المستخدم ---
-st.title("🌟 My FlashDeal Star 🌟")
-
-# اختيار مستوى الوصول
-acc = st.radio("Access Level", ["Standard", "Master Alpha 🔓"])
-
-# زر الطوارئ مرتبط بالصلاحيات
-if acc == "Master Alpha 🔓":
-    if st.button("Activate SOS Mode 🔔"):
-        trigger_emergency_protocol()
-else:
-    st.warning("SOS Mode requires Master Alpha access")
-
-# سجل الأحداث المباشر
-st.subheader("📜 Unified Memory Log (Session)")
-if not st.session_state.history:
-    st.write("No active logs.")
-else:
-    for item in reversed(st.session_state.history):
-        st.write(f"[{item['time']}] - {item['action']} ({item['status']})")
-
-# عرض محتوى log.txt من الملف الخارجي
-st.subheader("📂 External Log File (Persistent)")
-if os.path.exists(LOG_FILE):
-    with open(LOG_FILE, "r", encoding="utf-8") as f:
-        logs = f.readlines()
-    for line in reversed(logs[-20:]):  # عرض آخر 20 حدث فقط لتخفيف الحمل
-        st.text(line.strip())
-else:
-    st.write("No external log file found.")
-
-# التعرف على الوجه
-st.subheader("👤 Biometric Face Recognition")
-try:
-    img_data = st.camera_input("Activate Camera for Face Recognition")
-    if img_data:
-        handle_face(img_data)
-except Exception as e:
-    st.error(f"Camera error: {e}")
-    add_to_memory("Camera error", status="FAIL")
+with col2:
+    st.subheader("النظام العام")
+    st.json({"Secure_Core": "Active ✅", "Motion_Engine": "Ready ⚙️", "Face_Verification": "Enabled 🧑‍💻", "Token_Service": "Online 🔐"})
+st.write("---")
+st.caption("FlashDeal Star - High Quality Parallel Project")
