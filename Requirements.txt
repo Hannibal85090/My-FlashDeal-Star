@@ -1,6 +1,5 @@
-numpy==1.23.5
-opencv-python-headless
-dlib==19.24.1
-face-recognition
-pyserial
 streamlit
+opencv-python-headless
+numpy==1.23.5
+pyserial
+mediapipe
