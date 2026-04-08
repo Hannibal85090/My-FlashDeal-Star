@@ -6,5 +6,5 @@ scikit-learn==1.4
 matplotlib==3.8
 transformers==4.39
 torch==2.2
-gTTS
-pyttsx3
+gTTS==2.5.1
+pyttsx3==2.90
