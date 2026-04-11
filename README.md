@@ -12,6 +12,7 @@ Our core logic is handled by the **FlashDealAgent.sol** smart contract, integrat
 > 🔗 **Technical Support & Project Intelligence (Gemini Live):**
 > Interact with our specialized AI Agent for real-time insights and technical support regarding the ecosystem:
 > [**Access Gemini Live Agent 🤖**](https://gemini.google.com/)
+> Or Copilot : https://copilot.microsoft.com/shares/ewLD6byuucEDfTbS7uAp4
 
 ---
 
